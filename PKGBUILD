@@ -9,13 +9,12 @@ url='https://github.com/kubernetes-incubator/cri-o'
 license=(Apache)
 makedepends=(go go-md2man ostree)
 backup=('etc/crio/crio.conf')
-source=("git+https://github.com/kubernetes-incubator/cri-o")
+source=("git+https://github.com/kubernetes-incubator/cri-o#tag=v$pkgver")
 sha256sums=('SKIP')
 
 prepare() {
 	cd "$srcdir/$pkgname"
 
-	git checkout "v$pkgver"
 	install -m755 -d "$srcdir/go/src/github.com/kubernetes-incubator"
 	cp -a "$srcdir/$pkgname" "$srcdir/go/src/github.com/kubernetes-incubator/cri-o"
 }
