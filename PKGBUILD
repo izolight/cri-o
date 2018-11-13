@@ -12,17 +12,9 @@ backup=('etc/crio/crio.conf')
 source=("git+https://github.com/kubernetes-incubator/cri-o#tag=v$pkgver")
 sha256sums=('SKIP')
 
-prepare() {
-	cd "$srcdir/$pkgname"
-
-	install -m755 -d "$srcdir/go/src/github.com/kubernetes-incubator"
-	cp -a "$srcdir/$pkgname" "$srcdir/go/src/github.com/kubernetes-incubator/cri-o"
-}
-
 build() {
-	cd "$srcdir/go/src/github.com/kubernetes-incubator/cri-o"
+	cd "${pkgname}"
 
-	export GOPATH="$srcdir/go"
 	make -j1 binaries docs
 
 	./bin/crio --selinux=true \
@@ -34,8 +26,7 @@ build() {
 }
 
 package() {
-	cd "$srcdir/go/src/github.com/kubernetes-incubator/cri-o"
-
+	cd "${pkgname}"
 	make install install.systemd PREFIX="$pkgdir/usr"
 
 	# fix-up paths pointing to /usr/local to /usr
